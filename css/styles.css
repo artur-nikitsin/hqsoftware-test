@@ -1,5 +1,20 @@
 
-#column-body{
+#column-body {
     margin-top: 5%;
 }
 
+#toDo,
+#inProgress,
+#done {
+    min-height: 500px;
+}
+
+#addToDoTileButton button,
+#addInProgressTileButton button,
+#addDoneTileButton button
+{
+    position: relative;
+    width: 50%;
+    left: 25%;
+
+}

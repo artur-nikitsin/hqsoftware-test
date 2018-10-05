@@ -26,67 +26,107 @@
 <div class="container" id="column-body">
 
     <div class="row">
+        <div class="col-4">
 
-        <div class="card border-danger mb-3 col-4">
-            <div class="card-header bg-transparent ">To do</div>
-            <div class="card-body text-primary " id="toDo">
+            <div class="card border-danger mb-3 ">
 
-                <div class="alert alert-secondary" draggable="true" role="alert">
-                    7
-                </div>
-                <div class="alert alert-secondary " draggable="true" role="alert">
-                    8
-                </div>
-                <div class="alert alert-secondary" draggable="true" role="alert">
-                    9
+                <div class="card-header bg-transparent border-danger">To do</div>
+
+
+                <div class="card-body text-primary " id="toDo">
+
+
                 </div>
 
+            </div>
 
+            <div id="addToDoTileButton">
+                <button type="button" class="btn btn-secondary">Add+</button>
             </div>
         </div>
 
+        <div class="col-4">
+            <div class="card border-warning mb-3">
+                <div class="card-header bg-transparent border-warning">In progress</div>
+                <div class="card-body text-primary" id="inProgress">
 
-        <div class="card border-warning mb-3 col-4">
-            <div class="card-header bg-transparent border-warning">In progress</div>
-            <div class="card-body text-primary" id="inProgress">
 
-
-                <div class="alert alert-secondary" draggable="true" role="alert">
-                    1
-                </div>
-                <div class="alert alert-secondary " draggable="true" role="alert">
-                    2
-                </div>
-                <div class="alert alert-secondary" draggable="true" role="alert">
-                    3
                 </div>
 
-
+            </div>
+            <div id="addInProgressTileButton">
+                <button type="button" class="btn btn-secondary">Add+</button>
             </div>
         </div>
 
+        <div class="col-4">
+            <div class="card border-success mb-3">
+                <div class="card-header bg-transparent border-success">Done</div>
+                <div class="card-body text-primary" id="done">
 
-        <div class="card border-success mb-3 col-4">
-            <div class="card-header bg-transparent border-success">Done</div>
-            <div class="card-body text-primary" id="done">
 
-
-                <div class="alert alert-secondary" draggable="true" role="alert">
-                    4
                 </div>
-                <div class="alert alert-secondary " draggable="true" role="alert">
-                    5
-                </div>
-                <div class="alert alert-secondary" draggable="true" role="alert">
-                    6
-                </div>
+            </div>
 
-
+            <div id="addDoneTileButton">
+                <button type="button" class="btn btn-secondary">Add+</button>
             </div>
         </div>
+
     </div>
 
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Add tile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Title</span>
+                    </div>
+                    <input  id ="newTileTitleInput" type="text" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-sm">
+                </div>
+
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">description</span>
+                    </div>
+                    <input type="text"  id ="newTileDescriptionInput" class="form-control" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-sm">
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02">
+                        <label class="custom-file-label" for="inputGroupFile02"
+                               aria-describedby="inputGroupFileAddon02">Choose file</label>
+                    </div>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="inputGroupFileAddon02">Upload</span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="saveNewTileButton" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+
+        </div>
+    </div>
 </div>
 
 

@@ -12,57 +12,76 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
-    <script src="js/script.js"></script>
 
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="dragula/dist/dragula.min.css">
     <link rel="stylesheet" href="css/styles.css">
 
 </head>
 <body>
+
 <div class="container" id="column-body">
+
     <div class="row">
 
-        <div class="card border-danger mb-3 col-4" id="toDo">
-            <div class="card-header bg-transparent border-danger">To do</div>
-            <div class="card-body text-primary">
+        <div class="card border-danger mb-3 col-4">
+            <div class="card-header bg-transparent ">To do</div>
+            <div class="card-body text-primary " id="toDo">
 
-                <div class="alert alert-secondary" role="alert">
-                    A simple secondary alert—check it out!
+                <div class="alert alert-secondary" draggable="true" role="alert">
+                    7
+                </div>
+                <div class="alert alert-secondary " draggable="true" role="alert">
+                    8
+                </div>
+                <div class="alert alert-secondary" draggable="true" role="alert">
+                    9
                 </div>
 
-                <div class="alert alert-secondary" role="alert">
-                    A simple secondary alert—check it out!
-                </div>
-
-                <div class="alert alert-secondary" role="alert">
-                    A simple secondary alert—check it out!
-                </div>
-
-                <div class="alert alert-secondary" role="alert">
-                    A simple secondary alert—check it out!
-                </div>
 
             </div>
         </div>
 
-        <div class="card border-warning mb-3 col-4" id="inProgress">
+
+        <div class="card border-warning mb-3 col-4">
             <div class="card-header bg-transparent border-warning">In progress</div>
-            <div class="card-body text-primary">
-                <h5 class="card-title">Primary card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
+            <div class="card-body text-primary" id="inProgress">
+
+
+                <div class="alert alert-secondary" draggable="true" role="alert">
+                    1
+                </div>
+                <div class="alert alert-secondary " draggable="true" role="alert">
+                    2
+                </div>
+                <div class="alert alert-secondary" draggable="true" role="alert">
+                    3
+                </div>
+
+
             </div>
         </div>
 
 
-        <div class="card border-success mb-3 col-4" id="done">
+        <div class="card border-success mb-3 col-4">
             <div class="card-header bg-transparent border-success">Done</div>
-            <div class="card-body text-primary">
-                <h5 class="card-title">Primary card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                    card's content.</p>
+            <div class="card-body text-primary" id="done">
+
+
+                <div class="alert alert-secondary" draggable="true" role="alert">
+                    4
+                </div>
+                <div class="alert alert-secondary " draggable="true" role="alert">
+                    5
+                </div>
+                <div class="alert alert-secondary" draggable="true" role="alert">
+                    6
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -70,6 +89,9 @@
 
 </div>
 
+
+<script src='dragula/dist/dragula.min.js'></script>
+<script src="js/script.js"></script>
 
 </body>
 </html>

@@ -69,7 +69,7 @@
             </div>
 
             <div id="addDoneTileButton">
-                <button type="button" class="btn btn-secondary">Add+</button>
+                <button type="button" class="btn btn-secondary">Add</button>
             </div>
         </div>
 
@@ -92,19 +92,26 @@
 
                 <div class="input-group input-group-sm mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">Title</span>
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Title:</span>
                     </div>
-                    <input  id ="newTileTitleInput" type="text" class="form-control" aria-label="Sizing example input"
+                    <input id="newTileTitleInput" type="text" class="form-control" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-sm">
                 </div>
 
-                <div class="input-group input-group-sm mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-sm">description</span>
-                    </div>
-                    <input type="text"  id ="newTileDescriptionInput" class="form-control" aria-label="Sizing example input"
-                           aria-describedby="inputGroup-sizing-sm">
+
+                <div class="form-group">
+                    <label for="newTileDescriptionInput">Example textarea</label>
+                    <textarea class="form-control" id="newTileDescriptionInput" rows="3"></textarea>
                 </div>
+
+
+                <!-- <div class="input-group input-group-sm mb-3">
+                     <div class="input-group-prepend">
+                         <span class="input-group-text" id="inputGroup-sizing-sm">description</span>
+                     </div>
+                     <input type="text"  id ="newTileDescriptionInput" class="form-control" aria-label="Sizing example input"
+                            aria-describedby="inputGroup-sizing-sm">
+                 </div>-->
 
                 <div class="input-group mb-3">
                     <div class="custom-file">
@@ -120,8 +127,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="saveNewTileButton" type="button" class="btn btn-primary">Save changes</button>
+                <button id="closeModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="saveNewTileButton" type="button" class="btn btn-primary">Save</button>
             </div>
 
 

@@ -1,68 +1,84 @@
 var drake = dragula([document.querySelector('#toDo'), document.querySelector('#inProgress'), document.querySelector('#done')]);
 
-drake.on("drop", function (el, target, source) {
-
-    if (source.id === "toDo") {
-        var key = "toD" + "_" + el.id;
-        var newKey;
-
-        if (target.id === "inProgress") {
-            newKey = "inP" + "_" + el.id;
-        }
-        if (target.id === "done") {
-            newKey = "don" + "_" + el.id;
-        }
-
-        var elem = localStorage.getItem(key);
-        localStorage.removeItem(key);
-        localStorage.setItem(newKey, elem);
-    }
-    if (source.id === "inProgress") {
-        var key = "inP" + "_" + el.id;
-        var newKey;
-
-        if (target.id === "toDo") {
-            newKey = "toD" + "_" + el.id;
-        }
-        if (target.id === "done") {
-            newKey = "don" + "_" + el.id;
-        }
-
-        var elem = localStorage.getItem(key);
-        localStorage.removeItem(key);
-        localStorage.setItem(newKey, elem);
-    }
-    if (source.id === "done") {
-        var key = "don" + "_" + el.id;
-        var newKey;
-
-        if (target.id === "inProgress") {
-            newKey = "inP" + "_" + el.id;
-        }
-        if (target.id === "toDo") {
-            newKey = "toD" + "_" + el.id;
-        }
-
-        var elem = localStorage.getItem(key);
-        localStorage.removeItem(key);
-        localStorage.setItem(newKey, elem);
-    }
-
-
-});
 
 $(document).ready(function () {
+
+    $.getJSON("test.json")
+        .done(function (data) {
+
+        })
+
+        .fail(function (jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log("Request Failed: " + err);
+        });
+
+
+    drake.on("drop", function (el, target, source) {
+
+        if (source.id === "toDo") {
+            var key = "toD" + "_" + el.id;
+            var newKey;
+
+            if (target.id === "inProgress") {
+                newKey = "inP" + "_" + el.id;
+            }
+            if (target.id === "done") {
+                newKey = "don" + "_" + el.id;
+            }
+
+            var elem = localStorage.getItem(key);
+            localStorage.removeItem(key);
+            localStorage.setItem(newKey, elem);
+            parseToJson();
+
+        }
+        if (source.id === "inProgress") {
+            var key = "inP" + "_" + el.id;
+            var newKey;
+
+            if (target.id === "toDo") {
+                newKey = "toD" + "_" + el.id;
+            }
+            if (target.id === "done") {
+                newKey = "don" + "_" + el.id;
+            }
+
+            var elem = localStorage.getItem(key);
+            localStorage.removeItem(key);
+            localStorage.setItem(newKey, elem);
+            parseToJson();
+        }
+        if (source.id === "done") {
+            var key = "don" + "_" + el.id;
+            var newKey;
+
+            if (target.id === "inProgress") {
+                newKey = "inP" + "_" + el.id;
+            }
+            if (target.id === "toDo") {
+                newKey = "toD" + "_" + el.id;
+            }
+
+            var elem = localStorage.getItem(key);
+            localStorage.removeItem(key);
+            localStorage.setItem(newKey, elem);
+            parseToJson();
+        }
+
+
+    });
 
     var thisColumn;
     var tileMask;
     var modalMode = "newTile";
+    var localStorageToJson = [];
 
 
     var tileId;
     $("#addToDoTileButton").on("click", showModal);
     $("#addInProgressTileButton").on("click", showModal);
     $("#addDoneTileButton").on("click", showModal);
-
 
 
     function showModal() {
@@ -91,24 +107,25 @@ $(document).ready(function () {
     });
 
 
-
     var newIdCounter = function () {
         if (localStorage.getItem("idCounter") === null) return 0
-        else return Number(localStorage.getItem("idCounter"))+1;
+        else return Number(localStorage.getItem("idCounter"));
 
     }();
-
 
 
     function setId() {
 
         if (localStorage.getItem("idCounter") === null) {
-            localStorage.setItem("idCounter", newIdCounter);
             newIdCounter++;
+            localStorage.setItem("idCounter", newIdCounter);
+            parseToJson();
+
         } else {
             localStorage.removeItem("idCounter");
-            localStorage.setItem("idCounter", newIdCounter);
             newIdCounter++;
+            localStorage.setItem("idCounter", newIdCounter);
+            parseToJson();
 
         }
 
@@ -143,6 +160,7 @@ $(document).ready(function () {
             saveToLocalStorage(tileMask + "_" + newTileId, newTile);
 
             $(thisColumn).append(newTile);
+            parseToJson();
             $("#addModal").modal("hide");
 
         }
@@ -151,7 +169,14 @@ $(document).ready(function () {
 
             $(tileId).find("h5").text(newTileTitle);
             $(tileId).find("p").text(newTileDescription);
+
+
+            console.log(tileId);
+
+            editElementinLocalStogage(tileId);
+            parseToJson();
             $("#addModal").modal("hide");
+
         }
     });
 
@@ -162,7 +187,6 @@ $(document).ready(function () {
 
         var tileTitle, tileDescription, tileImage;
         tileId = "#t" + $(this)[0].id.substring(1);
-        console.log(tileId);
         tileTitle = $(tileId).find("h5").text();
         tileDescription = $(tileId).find("p").text();
 
@@ -206,7 +230,49 @@ $(document).ready(function () {
         }
 
     };
+
+
+    function editElementinLocalStogage(editedElementId) {
+
+
+        console.log(editedElementId);
+        var elem = $(editedElementId)[0].outerHTML;
+        var lsLen = localStorage.length;
+        if (lsLen > 0) {
+            for (var i = 0; i < lsLen; i++) {
+                var key = localStorage.key(i);
+
+                if (key === "idCounter") continue;
+
+                if (key.substring(4) === editedElementId.substring(1)) {
+                    localStorage.removeItem(key);
+                    localStorage.setItem(key, elem);
+
+                }
+
+            }
+
+        }
+
+    };
+
     getFromLocalStorage();
 
+    function parseToJson() {
+        localStorageToJson = [];
+        var lsLen = localStorage.length;
+        if (lsLen > 0) {
+            for (var i = 0; i < lsLen; i++) {
+                var key = localStorage.key(i);
+                var obj = {};
+                obj[key] = localStorage.getItem(key);
+                localStorageToJson.push(obj);
 
-});
+            }
+            ;
+        }
+    };
+
+
+})
+;

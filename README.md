@@ -1,16 +1,17 @@
 # hqsoftware-test
 
 
-to clone project use 'git clone https://github.com/artur-nikitsin/hqsoftware-test.git'
+1. to clone project in git  use: 'git clone https://github.com/artur-nikitsin/hqsoftware-test.git';
 
-you need json-server
-(npm install -g json-server)
+2. you need use node.js v8+   =>
 
-to run json-server => open command line in main project directory, and enter:
+install json-server (npm install -g json-server);
 
-json-server  test.json –w
+3. to run json-server => open command line in main project directory, and enter:
 
-in main project directory run 'index.html' file
+'json-server  test.json –w';
+
+4. in main project directory run 'index.html' file.
 
 
 

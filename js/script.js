@@ -1,20 +1,58 @@
 var drake = dragula([document.querySelector('#toDo'), document.querySelector('#inProgress'), document.querySelector('#done')]);
 
-
 $(document).ready(function () {
 
-    $.getJSON("test.json")
-        .done(function (data) {
+    var thisColumn,
+        tileMask,
+        modalMode = "newTile",
+        tileButtonId,
+        tileId,
+        newIdCounter;
 
-        })
+    function serverSync() {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:3000/tiles",
+            data: "",
+            success: function parseToPage(data) {
+                localStorage.clear();
 
-        .fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.log("Request Failed: " + err);
+                var jsonLen = data.length;
+
+                if (jsonLen > 0) {
+
+                    localStorage.clear();
+
+                    data.forEach(function (item, i, arr) {
+
+                        var obj = {
+                            id: item.id,
+                            tileid: item.tileid,
+                            title: item.title,
+                            description: item.description,
+                            buttonid: item.buttonid
+                        };
+
+                        saveToLocalStorage(item.id, JSON.stringify(obj));
+
+                    });
+
+                    getFromLocalStorage();
+
+                }
+
+            },
+
+            dataType: "json"
         });
 
+    };
 
+    serverSync();
+
+//// dragula (catch drop event)
     drake.on("drop", function (el, target, source) {
+
 
         if (source.id === "toDo") {
             var key = "toD" + "_" + el.id;
@@ -28,11 +66,31 @@ $(document).ready(function () {
             }
 
             var elem = localStorage.getItem(key);
+
             localStorage.removeItem(key);
             localStorage.setItem(newKey, elem);
-            parseToJson();
 
+
+            var newElem = JSON.parse(elem);
+            newElem.id = newKey;
+
+            $.ajax({
+                type: "DELETE",
+                url: "http://localhost:3000/tiles/" + key,
+                data: newElem,
+                success: "",
+                dataType: "json"
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/tiles/",
+                data: newElem,
+                success: "",
+                dataType: "json"
+            });
         }
+
         if (source.id === "inProgress") {
             var key = "inP" + "_" + el.id;
             var newKey;
@@ -45,9 +103,31 @@ $(document).ready(function () {
             }
 
             var elem = localStorage.getItem(key);
+
             localStorage.removeItem(key);
             localStorage.setItem(newKey, elem);
-            parseToJson();
+
+            var newElem = JSON.parse(elem);
+
+            newElem.id = newKey;
+
+
+            $.ajax({
+                type: "DELETE",
+                url: "http://localhost:3000/tiles/" + key,
+                data: newElem,
+                success: "",
+                dataType: "json"
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/tiles/",
+                data: newElem,
+                success: "",
+                dataType: "json"
+            });
+
         }
         if (source.id === "done") {
             var key = "don" + "_" + el.id;
@@ -61,25 +141,39 @@ $(document).ready(function () {
             }
 
             var elem = localStorage.getItem(key);
+
             localStorage.removeItem(key);
             localStorage.setItem(newKey, elem);
-            parseToJson();
-        }
 
+            var newElem = JSON.parse(elem);
+
+            newElem.id = newKey;
+
+
+            $.ajax({
+                type: "DELETE",
+                url: "http://localhost:3000/tiles/" + key,
+                data: newElem,
+                success: "",
+                dataType: "json"
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/tiles/",
+                data: newElem,
+                success: "",
+                dataType: "json"
+            });
+
+        }
 
     });
 
-    var thisColumn;
-    var tileMask;
-    var modalMode = "newTile";
-    var localStorageToJson = [];
 
-
-    var tileId;
     $("#addToDoTileButton").on("click", showModal);
     $("#addInProgressTileButton").on("click", showModal);
     $("#addDoneTileButton").on("click", showModal);
-
 
     function showModal() {
 
@@ -107,27 +201,14 @@ $(document).ready(function () {
     });
 
 
-    var newIdCounter = function () {
-        if (localStorage.getItem("idCounter") === null) return 0
-        else return Number(localStorage.getItem("idCounter"));
-
-    }();
-
-
     function setId() {
-
-        if (localStorage.getItem("idCounter") === null) {
+        newIdCounter = localStorage.length + 1;
+        let selector = "t" + newIdCounter;
+        if ($(document).is(selector)) {
             newIdCounter++;
-            localStorage.setItem("idCounter", newIdCounter);
-            parseToJson();
+            setId();
+        } else return
 
-        } else {
-            localStorage.removeItem("idCounter");
-            newIdCounter++;
-            localStorage.setItem("idCounter", newIdCounter);
-            parseToJson();
-
-        }
 
     };
 
@@ -137,64 +218,86 @@ $(document).ready(function () {
         var newTileTitle = $("#newTileTitleInput").val();
         var newTileDescription = $("#newTileDescriptionInput").val();
 
-// вставить функцию на проверку заполнения полей при создании нового тайла                TODO
-
-
         if (modalMode === "newTile") {
 
             var newTileImage;
             setId();
             var newTileId = "t" + newIdCounter;
             var newTilesButtonId = "b" + newIdCounter;
+            var tileObject = {
 
+                id: tileMask + "_" + newTileId,
+                tileid: newTileId,
+                title: newTileTitle,
+                description: newTileDescription,
+                buttonid: newTilesButtonId
+            };
 
-            var newTile = "<div id= " + newTileId + " class=\"tile\" style=\"width: 100%;\">\n" +
-                "<img class=\"card-img-top\" src=\"img/Без%20названия.svg\" alt=\"Card image cap\">\n" +
-                "<div class=\"card-body\">\n" +
-                "<h5 class=\"card-title\"> " + newTileTitle + "</h5>\n" +
-                "<p class=\"card-text\">" + newTileDescription + "</p>\n" +
-                "<a href=\"#\" id=" + newTilesButtonId + " newTilesButtonId class=\"btn btn-secondary\">Edit</a>\n" +
-                "</div>\n" +
-                "</div>";
+            saveToLocalStorage(tileMask + "_" + newTileId, JSON.stringify(tileObject));
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:3000/tiles",
+                data: tileObject,
+                success: "",
+                dataType: "json"
+            });
+            appendTileToColumn(thisColumn, newTileId, newTileTitle, newTileDescription, newTilesButtonId);
 
-            saveToLocalStorage(tileMask + "_" + newTileId, newTile);
-
-            $(thisColumn).append(newTile);
-            parseToJson();
             $("#addModal").modal("hide");
 
         }
 
         if (modalMode === "tileEditor") {
 
-            $(tileId).find("h5").text(newTileTitle);
-            $(tileId).find("p").text(newTileDescription);
+            $("#" + tileId).find("h5").text(newTileTitle);
+            $("#" + tileId).find("p").text(newTileDescription);
 
+            editElementinLocalStogage(tileId, newTileTitle, newTileDescription, tileButtonId);
 
-            console.log(tileId);
+            var tileObject = {
 
-            editElementinLocalStogage(tileId);
-            parseToJson();
+                id: tileMask + "_" + newTileId,
+                tileid: tileId,
+                title: newTileTitle,
+                description: newTileDescription,
+                buttonid: newTilesButtonId
+            };
+
             $("#addModal").modal("hide");
 
         }
     });
 
 
+    function appendTileToColumn(thisColumn, tileId, tileTitle, tileDescription, tileButtonId) {
+        var newTile = "<div id= " + tileId + " class=\"tile\" style=\"width: 100%;\">\n" +
+            "<img class=\"card-img-top\" src=\"img/Без%20названия.svg\" alt=\"Card image cap\">\n" +
+            "<div class=\"card-body\">\n" +
+            "<h5 class=\"card-title\"> " + tileTitle + "</h5>\n" +
+            "<p class=\"card-text\">" + tileDescription + "</p>\n" +
+            "<a href=\"#\" id= " + tileButtonId + " newTilesButtonId class=\"btn btn-secondary\">Edit</a>\n" +
+            "</div>\n" +
+            "</div>";
+        $(thisColumn).append(newTile);
+
+    };
+
+
     $(document).on("click ", ".tile a", function () {
 
         modalMode = "tileEditor";
-
         var tileTitle, tileDescription, tileImage;
-        tileId = "#t" + $(this)[0].id.substring(1);
-        tileTitle = $(tileId).find("h5").text();
-        tileDescription = $(tileId).find("p").text();
+        tileButtonId = $(this)[0].id;
+
+        tileId = "t" + $(this)[0].id.substring(1);
+
+        tileTitle = $("#" + tileId).find("h5").text();
+
+        tileDescription = $("#" + tileId).find("p").text();
 
         showModal();
         $("#newTileTitleInput").val(tileTitle);
         $("#newTileDescriptionInput").val(tileDescription);
-
-
     });
 
 
@@ -209,19 +312,26 @@ $(document).ready(function () {
             for (var i = 0; i < lsLen; i++) {
                 var key = localStorage.key(i);
 
-                if (key === "idCounter") continue;
 
                 if (key.substring(0, 3) === "toD") {
 
-                    $("#toDo").append(localStorage.getItem(key));
+                    var tileObject = JSON.parse(localStorage.getItem(key));
+
+                    appendTileToColumn("#toDo", tileObject.tileid, tileObject.title, tileObject.description, tileObject.buttonid);
                 }
                 if (key.substring(0, 3) === "inP") {
 
-                    $("#inProgress").append(localStorage.getItem(key));
+                    var tileObject = JSON.parse(localStorage.getItem(key));
+
+                    appendTileToColumn("#inProgress", tileObject.tileid, tileObject.title, tileObject.description, tileObject.buttonid);
+
                 }
                 if (key.substring(0, 3) === "don") {
 
-                    $("#done").append(localStorage.getItem(key));
+                    var tileObject = JSON.parse(localStorage.getItem(key));
+
+                    appendTileToColumn("#done", tileObject.tileid, tileObject.title, tileObject.description, tileObject.buttonid);
+
                 }
 
 
@@ -231,22 +341,35 @@ $(document).ready(function () {
 
     };
 
+    function editElementinLocalStogage(tileId, tileTitle, tileDescription, tileButton) {
 
-    function editElementinLocalStogage(editedElementId) {
+        var editedTileObject = {
+            tileid: tileId,
+            title: tileTitle,
+            description: tileDescription,
+            buttonid: tileButton
+        };
 
 
-        console.log(editedElementId);
-        var elem = $(editedElementId)[0].outerHTML;
         var lsLen = localStorage.length;
         if (lsLen > 0) {
             for (var i = 0; i < lsLen; i++) {
                 var key = localStorage.key(i);
 
-                if (key === "idCounter") continue;
 
-                if (key.substring(4) === editedElementId.substring(1)) {
+                if (key.substring(4) === tileId) {
                     localStorage.removeItem(key);
-                    localStorage.setItem(key, elem);
+                    editedTileObject.id = key;
+                    localStorage.setItem(key, JSON.stringify(editedTileObject));
+
+                    $.ajax({
+                        type: "PUT",
+                        url: "http://localhost:3000/tiles/" + key,
+                        data: editedTileObject,
+                        success: "",
+                        dataType: "json"
+                    });
+
 
                 }
 
@@ -254,23 +377,6 @@ $(document).ready(function () {
 
         }
 
-    };
-
-    getFromLocalStorage();
-
-    function parseToJson() {
-        localStorageToJson = [];
-        var lsLen = localStorage.length;
-        if (lsLen > 0) {
-            for (var i = 0; i < lsLen; i++) {
-                var key = localStorage.key(i);
-                var obj = {};
-                obj[key] = localStorage.getItem(key);
-                localStorageToJson.push(obj);
-
-            }
-            ;
-        }
     };
 
 

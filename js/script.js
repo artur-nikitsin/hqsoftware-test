@@ -270,12 +270,12 @@ $(document).ready(function () {
 
 
     function appendTileToColumn(thisColumn, tileId, tileTitle, tileDescription, tileButtonId) {
-        var newTile = "<div id= " + tileId + " class=\"tile\" style=\"width: 100%;\">\n" +
+        var newTile = "<div id= " + tileId + " class=\" tile card  \" style=\"width: 100%;\">\n" +
             "<img class=\"card-img-top\" src=\"img/Без%20названия.svg\" alt=\"Card image cap\">\n" +
             "<div class=\"card-body\">\n" +
             "<h5 class=\"card-title\"> " + tileTitle + "</h5>\n" +
             "<p class=\"card-text\">" + tileDescription + "</p>\n" +
-            "<a href=\"#\" id= " + tileButtonId + " newTilesButtonId class=\"btn btn-secondary\">Edit</a>\n" +
+            "<a href=\"#\" id= " + tileButtonId + " newTilesButtonId class=\"btn btn-dark\">Edit</a>\n" +
             "</div>\n" +
             "</div>";
         $(thisColumn).append(newTile);
